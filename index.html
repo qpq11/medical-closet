@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  
+<meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Отправка данных на сервер</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #FFFFFF;
+    }
+    form {
+      background: #fff;
+      padding: 50px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      width: 300px;
+    }
+    h2 {
+      margin-bottom: 10px;
+      font-size: 24px;
+      text-align: center;
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #008080;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background-color: #008B8B;
+    }
+    .message {
+      margin-top: 20px;
+      text-align: center;
+      color: #28a745;
+    }
+  </style>
+</head>
+<body>
+  <form action="insert.php" method="POST">
+    <h2>Новая запись</h2>
+
+    <label for="password">Пароль:</label>
+    <input type="password" id="password" name="password" required>
+
+
+    <label for="login">Логин:</label>
+    <input type="text" id="login" name="login" placeholder="Введите логин" required>
+
+    <label for="medicine">Штрих-код:</label>
+    <input type="text" id="medicine" name="medicine" placeholder="Введите штрих-код" required>
+
+    <label for="date">Срок годности:</label>
+    <input type="date" id="date" name="date" placeholder="Введите срок годности лекарства" required>
+
+	<label for="cell">Номер ячейки (1, 2, 3):</label>
+	<input type="number" id="cell" name="cell" min="1" max="3" required>
+
+    <button type="submit">Подтвердить</button>
+
+    <button class="delete-btn" onclick="location.href='delete_form.html'">
+        Удалить лекарство
+    </button>
+
+    <button class="check-button" onclick="location.href='checker.html'">
+        Проверить статус
+    </button>
+  </form>
+
+  <div id="popup" class="popup" style="display: none;"></div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const success = urlParams.get('success');
+      const error = urlParams.get('error');
+      const attemptsLeft = 3 - (parseInt(urlParams.get('attempts')) || 0);
+      const changes = urlParams.get('changes');
+      const popup = document.getElementById('popup');
+
+      if (success === '1') {
+        popup.textContent = 'Данные успешно сохранены!';
+        popup.className = 'popup success';
+        popup.style.display = 'block';
+        
+        // Убираем параметры из URL без перезагрузки страницы
+        history.replaceState(null, null, window.location.pathname);
+        
+        // Автоматическое скрытие через 3 секунды
+        setTimeout(() => {
+          popup.style.display = 'none';
+        }, 3000);
+      }
+      
+      else if (error === '1') {
+        popup.textContent = 'Ошибка ввода данных!';
+        popup.className = 'popup error';
+        popup.style.display = 'block';
+
+        history.replaceState(null, null, window.location.pathname);
+        setTimeout(() => {
+          popup.style.display = 'none';
+        }, 3000);
+      }
+
+
+      else if (error === 'wrong_password') {
+        popup.textContent = `Неверный пароль! Осталось попыток: ${attemptsLeft}`;
+        popup.className = 'popup error';
+        popup.style.display = 'block';
+        
+        history.replaceState(null, null, window.location.pathname);
+        setTimeout(() => {
+          popup.style.display = 'none';
+        }, 3000);
+      }
+
+      else if (changes === 'true'){
+        popup.textContent = 'Изменение содержимого! Рекомендуем проверить содержимое ячеек.';
+        popup.className = 'popup error';
+        popup.style.display = 'block';
+
+        history.replaceState(null, null, window.location.pathname);
+        setTimeout(() => {
+          popup.style.display = 'none';
+        }, 3000);
+      }
+      
+      else if (changes === 'false'){
+        popup.textContent = 'Изменений содержимого не обнаружено.';
+        popup.className = 'popup error';
+        popup.style.display = 'block';
+
+        history.replaceState(null, null, window.location.pathname);
+        setTimeout(() => {
+          popup.style.display = 'none';
+        }, 3000);
+      }
+    });
+  </script>
+</body>
+</html>
+
+
