@@ -45,4 +45,4 @@
 ## Фото устройства
 ![20250512_110507](https://github.com/user-attachments/assets/b755d45a-1ad6-4cde-874b-d0a017a1343f)
 ## Демонстрация работы
-
+[Видео](https://github.com/qpq11/medical-closet/blob/main/video_2025-05-15_23-57-24.mp4)
